@@ -81,9 +81,12 @@ namespace VicII_Province_Creator
             string[] RegionsFile = System.IO.File.ReadAllLines(@path);
             foreach (string line in RegionsFile)
             {
-                if ((line.Contains(" = {") == true) && (line.IndexOf("#") != 0))
+                if (line.Contains(" = {") == true && line.IndexOf("#") != 0)
                 {
-                    Regions.Add(line.Remove(0, line.IndexOf("#") + 1) + " - " + line.Remove(line.IndexOf("= {")));
+                    if (line.Contains('#'))
+                        Regions.Add(line.Remove(0, line.IndexOf("#") + 1) + " - " + line.Remove(line.IndexOf("= {")));
+                    else
+                        Regions.Add(line.Remove(line.IndexOf("= {")));
                 }
             }
             return Regions;
@@ -295,7 +298,11 @@ namespace VicII_Province_Creator
         {
             int index = 0;
             int ind = 0;
-            string regg = region.Split('-')[1].Remove(0, 1);
+            string regg = String.Empty;
+            if (region.Contains('-'))
+                regg = region.Split('-')[1].Remove(0, 1);
+            else
+                regg = region;
             string[] contArchCont = ReadTxt(path);
             foreach (string reg in contArchCont)
             {
@@ -342,23 +349,14 @@ namespace VicII_Province_Creator
         {
 
             var path = getFolder("default") + "definition.csv";
-
-            //before your loop
             var csv = new StringBuilder();
-
-            //in your loop
             var id = this.id.ToString();
             var red = this.red.ToString();
             var green = this.green.ToString();
             var blue = this.blue.ToString();
             var name = this.provName.ToString();
-
-
-            //Suggestion made by KyleMit
             var newLine = string.Format("{0};{1};{2};{3};{4};x", id, red, green, blue, name);
             csv.AppendLine(newLine);
-
-            //after your loop
             File.AppendAllText(path, csv.ToString());
         }
 
@@ -1066,6 +1064,15 @@ namespace VicII_Province_Creator
         {
             w.Show();
             w.ShowProvinceNames(provinceNames);
+        }
+
+        public bool IsClosed { get; private set; }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            w.Close();
+            IsClosed = true;
         }
     }
 }

@@ -13,7 +13,6 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <ScrollViewer HorizontalScrollBarVisibility="Auto">
-
         <Grid
             Width="690"
             Height="915"
@@ -353,7 +352,8 @@
                 Name="coresLb"
                 Height="111"
                 Margin="10,317,482,0"
-                VerticalAlignment="Top">
+                VerticalAlignment="Top"
+                d:ItemsSource="{d:SampleData ItemCount=5}">
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -455,7 +455,7 @@
                 Margin="399,416,0,0"
                 VerticalAlignment="Top"
                 Click="seeCreatedProvs_Click"
-                Content="Ver Provincias" />
+                Content="See Provinces" />
 
             <StackPanel Margin="10,470,482,158.5" Orientation="Vertical">
                 <TextBox
