@@ -90,6 +90,9 @@
     <Compile Include="OpeningWindows.xaml.cs">
       <DependentUpon>OpeningWindows.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProvinceListWindow.xaml.cs">
+      <DependentUpon>ProvinceListWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -103,6 +106,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="OpeningWindows.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProvinceListWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

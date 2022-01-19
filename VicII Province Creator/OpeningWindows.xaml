@@ -8,11 +8,11 @@
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
         WindowStartupLocation="CenterScreen"
-        Title="Victoria II Province Creator" Height="150" Width="350">
+        Title="Victoria II Province Creator" Height="150" Width="400">
     <Grid>
-        <Button Content="Select Path" HorizontalAlignment="Stretch" Margin="126,71,114,0" VerticalAlignment="Top" Click="Button_Click"/>
-        <TextBox x:Name="mapPathTb" HorizontalAlignment="Left" Height="23" Margin="10,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="312" TextChanged="mapPathTb_TextChanged"/>
-        <Button x:Name="gotoMainwidowsBtn" Content="Accept" HorizontalAlignment="Left" Margin="247,71,0,0" VerticalAlignment="Top" Width="75" Click="gotoMainwidowsBtn_Click" IsEnabled="False"/>
+        <Button Content="Select Path" Margin="0,71,114,0" VerticalAlignment="Top" Click="Button_Click" Width="110" HorizontalAlignment="Right"/>
+        <TextBox x:Name="mapPathTb" Height="23" Margin="10,23,28,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="mapPathTb_TextChanged"/>
+        <Button x:Name="gotoMainwidowsBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,71,28,0" VerticalAlignment="Top" Click="gotoMainwidowsBtn_Click" IsEnabled="False" Width="75"/>
 
     </Grid>
 </Window>

@@ -1,20 +1,16 @@
-﻿using System;
+﻿using LiveCharts;
+using LiveCharts.Defaults;
+using LiveCharts.Wpf;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
-using LiveCharts;
-using LiveCharts.Defaults;
-using LiveCharts.Wpf;
-using Microsoft.Win32;
 using ComboBox = System.Windows.Controls.ComboBox;
 using MessageBox = System.Windows.MessageBox;
 
@@ -25,12 +21,13 @@ namespace VicII_Province_Creator
     /// </summary>
     public partial class MainWindow : Window
     {
+        ProvinceListWindow w = new ProvinceListWindow();
 
         string id;
         string provName;
-        string pathToMap;        
+        string pathToMap;
         int cantPops;
-        string RGB;      
+        string RGB;
         string red;
         string green;
         string blue;
@@ -38,13 +35,14 @@ namespace VicII_Province_Creator
         string continent;
         string climate;
         string region;
-        string tradegood;       
+        string tradegood;
         string controller;
         string liferating;
         string owner;
         bool uncolonized = false;
         string popDir;
 
+        List<string> provinceNames = new List<string>();
         List<string> cores = new List<string>();
         List<string> popType = new List<string>();
         List<string> popCul = new List<string>();
@@ -66,9 +64,9 @@ namespace VicII_Province_Creator
             idTb.Text = lastId.ToString();
 
             popDir = getFolder("map") + @"history\pops\1836.1.1\";
-            popDirTb.Text = popDir;          
+            popDirTb.Text = popDir;
 
-            SeriesCollection = new SeriesCollection{ };
+            SeriesCollection = new SeriesCollection { };
             SeriesCollection2 = new SeriesCollection { };
             DataContext = this;
         }
@@ -93,61 +91,57 @@ namespace VicII_Province_Creator
 
         private void createBtn_Click(object sender, RoutedEventArgs e)
         {
-            try
+
+            id = idTb.Text;
+            var idlast = Int32.Parse(id) + 1;
+            idTb.Text = idlast.ToString();
+
+            provName = provNameTb.Text;
+            red = redTb.Text;
+            green = greenTb.Text;
+            blue = blueTb.Text;
+            countryName = countryNameTb.Text;
+            continent = GetTextCb(continentCb);
+            climate = GetTextCb(climateCb);
+            region = regionTb.Text;
+            tradegood = goodTb.Text;
+            liferating = liferatingTb.Text;
+
+            if (controllerTb.IsEnabled != true)
             {
-                id = idTb.Text;
-                var idlast = Int32.Parse(id) + 1;
-                idTb.Text = idlast.ToString();
-
-                provName = provNameTb.Text;
-                red = redTb.Text;
-                green = greenTb.Text;
-                blue = blueTb.Text;
-                countryName = countryNameTb.Text;
-                continent = GetTextCb(continentCb);
-                climate = GetTextCb(climateCb);
-                region = regionTb.Text;
-                tradegood = goodTb.Text;
-                liferating = liferatingTb.Text;
-
-                if (controllerTb.IsEnabled != true)
-                {
-                    controller = ownerTb.Text;
-                }
-                else
-                {
-                    controller = controllerTb.Text;
-                }
-
-                if (uncolonized != true)
-                {
-                    controller = ownerTb.Text;
-                }
-                else
-                {
-                    controller = controllerTb.Text;
-                }
-
-                owner = ownerTb.Text;
-                cantPops = popCul.Count;
-                
-
-                CreatePops();
-                writeDefFile();
-                WriteCliArch(getFolder("default") + "climate.txt");
-                WriteContArch(getFolder("default") + "continent.txt");
-                WriteRegArch(getFolder("default") + "region.txt");
-                WritePosFile(getFolder("default") + "positions.txt");
-                CreateProvHis(uncolonized);
-                WriteLocFile();
-                writeDefaultArc();
-                MessageBox.Show("Province created succefully");
-                CreateLogArchive();
+                controller = ownerTb.Text;
             }
-            catch
+            else
             {
-                MessageBox.Show("Error with province creation");
+                controller = controllerTb.Text;
             }
+
+            if (uncolonized != true)
+            {
+                controller = ownerTb.Text;
+            }
+            else
+            {
+                controller = controllerTb.Text;
+            }
+
+            owner = ownerTb.Text;
+            cantPops = popCul.Count;
+
+
+            CreatePops();
+            writeDefFile();
+            WriteCliArch(getFolder("default") + "climate.txt");
+            WriteContArch(getFolder("default") + "continent.txt");
+            WriteRegArch(getFolder("default") + "region.txt");
+            WritePosFile(getFolder("default") + "positions.txt");
+            CreateProvHis(uncolonized);
+            WriteLocFile();
+            writeDefaultArc();
+            MessageBox.Show("Province created succefully");
+            CreateLogArchive();
+            provinceNames.Add(provName);
+            w.ShowProvinceNames(provinceNames);
         }
 
         public void CreateLogArchive()
@@ -166,7 +160,7 @@ namespace VicII_Province_Creator
             {
                 File.Delete(filename);
             }
-           
+
             using (StreamWriter sw = File.CreateText(filename))
             {
                 sw.WriteLine("created at = " + DateTime.Now.ToString());
@@ -187,7 +181,7 @@ namespace VicII_Province_Creator
                 sw.WriteLine("life rating = " + this.liferating);
             }
 
-            MessageBox.Show("Log file created succefully at " + filename); 
+            MessageBox.Show("Log file created succefully at " + filename);
 
         }
 
@@ -236,14 +230,14 @@ namespace VicII_Province_Creator
             }
 
             string filename = getFolder("map") + @"history\provinces\new provinces " + countryName + @"\" + this.id + " - " + this.provName + ".txt";
-            
-                // Check if file already exists. If yes, delete it.     
-                if (File.Exists(filename))
-                {
-                    File.Delete(filename);
-                }
 
-            if(col == false)
+            // Check if file already exists. If yes, delete it.     
+            if (File.Exists(filename))
+            {
+                File.Delete(filename);
+            }
+
+            if (col == false)
             {
                 using (StreamWriter sw = File.CreateText(filename))
                 {
@@ -260,13 +254,13 @@ namespace VicII_Province_Creator
             else
             {
                 using (StreamWriter sw = File.CreateText(filename))
-                {                  
+                {
                     sw.WriteLine("trade_goods = " + this.tradegood);
                     sw.WriteLine("life_rating = " + this.liferating);
                 }
             }
-                // Create a new file     
-                
+            // Create a new file     
+
 
         }
 
@@ -288,8 +282,8 @@ namespace VicII_Province_Creator
                     sw.WriteLine("}");
                 }
 
-                   
-                
+
+
             }
             catch (Exception Ex)
             {
@@ -299,12 +293,13 @@ namespace VicII_Province_Creator
 
         public void WriteRegArch(string path)
         {
-            int index = 1237;
+            int index = 0;
             int ind = 0;
+            string regg = region.Split('-')[1].Remove(0, 1);
             string[] contArchCont = ReadTxt(path);
             foreach (string reg in contArchCont)
             {
-                if (reg.Contains(reformatString(region)) == true)
+                if (reg.Contains(regg))
                 {
                     index = ind;
                 }
@@ -314,13 +309,11 @@ namespace VicII_Province_Creator
             string s = contArchCont[index];
             string[] subs = s.Split('}');
             var ss = subs[1];
-            
 
             contArchCont[index] = contArchCont[index].Remove(contArchCont[index].IndexOf("}"));
             contArchCont[index] += " " + this.id + " }" + ss;
 
             File.WriteAllLines(path, contArchCont);
-
         }
 
         public void WriteContArch(string path)
@@ -375,7 +368,7 @@ namespace VicII_Province_Creator
             string filename = popDir + countryName + ".txt";
             try
             {
-                
+
                 // Create a new file     
                 using (StreamWriter sw = File.AppendText(filename))
                 {
@@ -388,13 +381,13 @@ namespace VicII_Province_Creator
                         sw.WriteLine("        religion = " + reformatString(popRel[z]));
                         sw.WriteLine("        size = " + this.popSize[z]);
                         sw.WriteLine("    }");
-                        
+
                     }
                     sw.WriteLine("}");
-                    
+
                 }
 
-                
+
             }
             catch (Exception Ex)
             {
@@ -417,7 +410,7 @@ namespace VicII_Province_Creator
                         listId.Add(Int32.Parse(values[0]));
                     }
                     catch { }
-                    
+
                     RGBs.Add(values[1] + values[2] + values[3]);
                     listNamesProv.Add(values[4]);
                 }
@@ -483,16 +476,17 @@ namespace VicII_Province_Creator
 
         public class core
         {
-            
+
             public string name { get; set; }
 
         }
 
         public class popInfo
         {
-
-            public string info { get; set; }
-
+            public string Type { get; set; }
+            public string Culture { get; set; }
+            public string Size { get; set; }
+            public string Religion { get; set; }
         }
 
         private string GetTextCb(ComboBox cb)
@@ -526,11 +520,11 @@ namespace VicII_Province_Creator
             saveList.Clear();
             List<int> indexes;
             indexes = getPopIndexes(saveList, cul, val);
-            
-            for (int i = 0; i<indexes.Count; i++)
+
+            for (int i = 0; i < indexes.Count; i++)
             {
                 total += Int32.Parse(numList[indexes[i]]);
-            }                    
+            }
             return total;
         }
 
@@ -575,14 +569,13 @@ namespace VicII_Province_Creator
             List<int> tempCulSize = new List<int>();
             List<int> tempSize = new List<int>();
             List<string> tempType = new List<string>();
-            popsLb.Items.Add(new popInfo() { info = sizeTb.Text + " " + cultureTb.Text.ToLower() + " " + GetTextCb(religionCb).ToLower() + " " + GetTextCb(typeCb).ToLower() });
+            popsLb.Items.Add(new popInfo() { Size = sizeTb.Text, Culture = cultureTb.Text.ToLower(), Religion = GetTextCb(religionCb).ToLower(), Type = GetTextCb(typeCb).ToLower() });
             popType.Add(GetTextCb(typeCb));
             popCul.Add(cultureTb.Text);
             popRel.Add(GetTextCb(religionCb));
             popSize.Add(sizeTb.Text);
 
             drawCharts(culIndexes, popSize, popCul, tempCul, tempCulSize, SeriesCollection);
-
             drawCharts(typeIndexes, popSize, popType, tempType, tempSize, SeriesCollection2);
 
         }
@@ -602,7 +595,7 @@ namespace VicII_Province_Creator
         private void checkBtn_Click(object sender, RoutedEventArgs e)
         {
             this.RGB = redTb.Text + greenTb.Text + blueTb.Text;
-            if(CheckRGB() == true)
+            if (CheckRGB() == true)
             {
                 MessageBox.Show("The RGB code is not disponible");
             }
@@ -625,7 +618,7 @@ namespace VicII_Province_Creator
             {
                 MessageBox.Show("Select an item", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-                       
+
         }
 
         private void delPopBtn_Click(object sender, RoutedEventArgs e)
@@ -636,7 +629,7 @@ namespace VicII_Province_Creator
             List<int> tempCulSize = new List<int>();
             List<int> tempSize = new List<int>();
             List<string> tempType = new List<string>();
-                        
+
             try
             {
                 int x = (popsLb.SelectedIndex);
@@ -645,16 +638,15 @@ namespace VicII_Province_Creator
                 popRel.RemoveAt(x);
                 popSize.RemoveAt(x);
                 popType.RemoveAt(x);
-                
+
                 drawCharts(culIndexes, popSize, popCul, tempCul, tempCulSize, SeriesCollection);
                 drawCharts(typeIndexes, popSize, popType, tempType, tempSize, SeriesCollection2);
             }
             catch
             {
-                
-                MessageBox.Show("Select an item", "Error",MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Select an item", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            
+
         }
 
         private void ownerTb_TextChanged(object sender, TextChangedEventArgs e)
@@ -671,20 +663,15 @@ namespace VicII_Province_Creator
         public string getFolder(string index)
         {
             string path = this.pathToMap;
-            if(index == "map")
+            if (index == "map")
             {
                 path = path.Remove(path.LastIndexOf("."));
             }
-
             string folder = String.Empty;
             int i = 0;
-
             var count = Regex.Matches(path, index).Count;
-
-
-            
-            if(count > 1)
-            {               
+            if (count > 1)
+            {
                 i = path.LastIndexOf(index);
                 folder = path.Remove(i);
             }
@@ -705,6 +692,185 @@ namespace VicII_Province_Creator
             blueTb.Text = rgb[3];
         }
 
+        public string reformatString(string s)
+        {
+            var rs = s;
+
+            rs = rs.ToLower();
+            rs = rs.Replace(" ", "_");
+
+            return rs;
+        }
+
+        private void uncolonizedCx_Click(object sender, RoutedEventArgs e)
+        {
+            if (uncolonized == false)
+            {
+                uncolonized = true;
+                coreTb.IsEnabled = false;
+                ownerTb.IsEnabled = false;
+                addCoreBtn.IsEnabled = false;
+            }
+            else
+            {
+                uncolonized = false;
+                coreTb.IsEnabled = true;
+                ownerTb.IsEnabled = true;
+                addCoreBtn.IsEnabled = true;
+            }
+
+        }
+        public void getFolder()
+        {
+
+            try
+            {
+                var dialog = new FolderBrowserDialog();
+                DialogResult result = dialog.ShowDialog();
+                popDir = Directory.GetFiles(dialog.SelectedPath)[0];
+                popDir = popDir.Remove(popDir.LastIndexOf(@"\"));
+                popDir += @"\";
+                popDirTb.Text = popDir;
+            }
+            catch
+            {
+                MessageBox.Show("Error", "Error");
+            }
+
+        }
+
+        private void popDirBtn_Click(object sender, RoutedEventArgs e)
+        {
+            getFolder();
+        }
+
+        private List<string> GetAllCulturesNames()
+        {
+            var dir = getFolder("map") + @"common\cultures.txt";
+            List<string> rl = new List<string>();
+            string[] culCont = ReadTxt(dir);
+            int i = 0;
+            foreach (string cul in culCont)
+            {
+                if (i != culCont.Length)
+                    if (cul.Contains(" = {") && culCont[i + 1].Contains("color") && !cul.Contains("#"))
+                    {
+                        rl.Add(cul.Split('=')[0].Replace(" ", string.Empty));
+                    }
+                i++;
+            }
+
+            return rl;
+        }
+
+        private List<string> GetAllCountriesNames()
+        {
+            var dir = getFolder("map") + @"common\countries\";
+            List<string> rl = new List<string>();
+            DirectoryInfo dinfo = new DirectoryInfo(dir);
+            FileInfo[] Files = dinfo.GetFiles("*.txt");
+            foreach (FileInfo file in Files)
+                rl.Add(file.Name.Split('.')[0]);
+
+            return rl;
+        }
+
+        #region Popups
+        #region Countries
+        //for the region autocompletation
+        private void OpenAutoCountrySuggestionBox()
+        {
+            try
+            {
+                // Enable.  
+
+                autoCountryPopup.Visibility = Visibility.Visible;
+                autoCountryPopup.IsOpen = true;
+                CountryList.Visibility = Visibility.Visible;
+            }
+            catch (Exception ex)
+            {
+                // Info.  
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.Write(ex);
+            }
+        }
+
+        private void CloseAutoCountrySuggestionBox()
+        {
+            try
+            {
+                // Enable.  
+                autoCountryPopup.Visibility = Visibility.Collapsed;
+                autoCountryPopup.IsOpen = false;
+                CountryList.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception ex)
+            {
+                // Info.  
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.Write(ex);
+            }
+        }
+
+        private void countryTb_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                // Verification.  
+                if (string.IsNullOrEmpty(this.countryNameTb.Text))
+                {
+                    // Disable.  
+                    CloseAutoCountrySuggestionBox();
+
+                    // Info.  
+                    return;
+                }
+
+                // Enable.  
+                OpenAutoCountrySuggestionBox();
+
+                // Settings.  
+                CountryList.ItemsSource = GetAllCountriesNames().Where(p => p.ToLower().Contains(countryNameTb.Text.ToLower())).ToList();
+            }
+            catch (Exception ex)
+            {
+                // Info.  
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.Write(ex);
+            }
+        }
+
+        private void countryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                // Verification.  
+                if (CountryList.SelectedIndex <= -1)
+                {
+                    // Disable.  
+                    CloseAutoCountrySuggestionBox();
+
+                    // Info.  
+                    return;
+                }
+
+                // Disable.  
+                CloseAutoCountrySuggestionBox();
+
+                // Settings.  
+                countryNameTb.Text = CountryList.SelectedItem.ToString();
+                CountryList.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                // Info.  
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.Write(ex);
+            }
+        }
+        #endregion
+        #region Region
         //for the region autocompletation
         private void OpenAutoSuggestionBox()
         {
@@ -797,61 +963,109 @@ namespace VicII_Province_Creator
                 Console.Write(ex);
             }
         }
-
-        public string reformatString(string s)
+        #endregion
+        #region cultures 
+        //for the region autocompletation
+        private void OpenCultureAutoSuggestionBox()
         {
-            var rs = s;
-
-            rs = rs.ToLower();
-            rs = rs.Replace(" ", "_");
-
-            return rs;
-        }
-
-        private void uncolonizedCx_Click(object sender, RoutedEventArgs e)
-        {
-            if(uncolonized == false)
-            {
-                uncolonized = true;
-                coreTb.IsEnabled = false;
-                ownerTb.IsEnabled = false;
-                addCoreBtn.IsEnabled = false;
-            }
-            else
-            {
-                uncolonized = false;
-                coreTb.IsEnabled = true;
-                ownerTb.IsEnabled = true;
-                addCoreBtn.IsEnabled = true;
-            }
-            
-        }
-        public void getFolder()
-        {
-            
             try
             {
-                var dialog = new FolderBrowserDialog();
-                DialogResult result = dialog.ShowDialog();
+                // Enable.  
 
-                popDir = Directory.GetFiles(dialog.SelectedPath)[0];
-                popDir = popDir.Remove(popDir.LastIndexOf(@"\"));
-                popDir += @"\";
-                popDirTb.Text = popDir;
-
-
+                autoCulturePopup.Visibility = Visibility.Visible;
+                autoCulturePopup.IsOpen = true;
+                CultureList.Visibility = Visibility.Visible;
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Error", "Error");
-                
+                // Info.  
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.Write(ex);
             }
-          
         }
 
-        private void popDirBtn_Click(object sender, RoutedEventArgs e)
+        private void CloseCultureAutoSuggestionBox()
         {
-            getFolder();
+            try
+            {
+                // Enable.  
+                autoCulturePopup.Visibility = Visibility.Collapsed;
+                autoCulturePopup.IsOpen = false;
+                CultureList.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception ex)
+            {
+                // Info.  
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.Write(ex);
+            }
+        }
+
+        private void CultureTb_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                // Verification.  
+                if (string.IsNullOrEmpty(this.cultureTb.Text))
+                {
+                    // Disable.  
+                    CloseCultureAutoSuggestionBox();
+
+                    // Info.  
+                    return;
+                }
+
+                // Enable.  
+                OpenCultureAutoSuggestionBox();
+
+                // Settings.  
+                CultureList.ItemsSource = GetAllCulturesNames().Where(p => p.ToLower().Contains(cultureTb.Text.ToLower())).ToList();
+            }
+            catch (Exception ex)
+            {
+                // Info.  
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.Write(ex);
+            }
+        }
+
+        private void CultureList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                // Verification.  
+                if (CultureList.SelectedIndex <= -1)
+                {
+                    // Disable.  
+                    CloseCultureAutoSuggestionBox();
+
+                    // Info.  
+                    return;
+                }
+
+                // Disable.  
+                CloseCultureAutoSuggestionBox();
+
+                // Settings.  
+                cultureTb.Text = CultureList.SelectedItem.ToString();
+                CultureList.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                // Info.  
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.Write(ex);
+            }
+
+        }
+        #endregion
+
+        #endregion
+
+        private void seeCreatedProvs_Click(object sender, RoutedEventArgs e)
+        {
+            w.Show();
+            w.ShowProvinceNames(provinceNames);
         }
     }
 }
