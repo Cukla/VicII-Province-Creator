@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media;
 using ComboBox = System.Windows.Controls.ComboBox;
 using MessageBox = System.Windows.MessageBox;
 
@@ -42,6 +43,8 @@ namespace VicII_Province_Creator
         bool uncolonized = false;
         string popDir;
 
+        List<string> AutoCompletationCultureList = new List<string>();
+        List<string> CulturesRGBsColorsList = new List<string>();
         List<string> provinceNames = new List<string>();
         List<string> cores = new List<string>();
         List<string> popType = new List<string>();
@@ -68,6 +71,8 @@ namespace VicII_Province_Creator
 
             SeriesCollection = new SeriesCollection { };
             SeriesCollection2 = new SeriesCollection { };
+            AutoCompletationCultureList = GetAllCulturesNames();
+
             DataContext = this;
         }
 
@@ -543,19 +548,26 @@ namespace VicII_Province_Creator
             {
                 for (int ai = 0; ai < tempNames.Count; ai++)
                 {
-                    series.Add(new PieSeries
-                    {
-                        Title = tempNames[ai],
-                        Values = new ChartValues<ObservableValue> { new ObservableValue(tempSize[ai]) },
-                        DataLabels = true
-                    });
-
+                    if (AutoCompletationCultureList.IndexOf(tempNames[ai]) != -1)
+                        series.Add(new PieSeries
+                        {
+                            Title = tempNames[ai],
+                            Values = new ChartValues<ObservableValue> { new ObservableValue(tempSize[ai]) },
+                            DataLabels = true,
+                            Fill = new SolidColorBrush(Color.FromArgb(255,
+                            (byte)Convert.ToInt32(CulturesRGBsColorsList[AutoCompletationCultureList.IndexOf(tempNames[ai])].Split(' ')[0].Replace(" ", string.Empty)),
+                            (byte)Convert.ToInt32(CulturesRGBsColorsList[AutoCompletationCultureList.IndexOf(tempNames[ai])].Split(' ')[1].Replace(" ", string.Empty)),
+                            (byte)Convert.ToInt32(CulturesRGBsColorsList[AutoCompletationCultureList.IndexOf(tempNames[ai])].Split(' ')[2].Replace(" ", string.Empty))))
+                        });
+                    else
+                        series.Add(new PieSeries
+                        {
+                            Title = tempNames[ai],
+                            Values = new ChartValues<ObservableValue> { new ObservableValue(tempSize[ai]) },
+                            DataLabels = true
+                        });
                 }
 
-            }
-            else
-            {
-                series.Add(new PieSeries { Title = cultureTb.Text, Values = new ChartValues<ObservableValue> { new ObservableValue(Int32.Parse(sizeTb.Text)) }, DataLabels = true });
             }
         }
 
@@ -753,11 +765,17 @@ namespace VicII_Province_Creator
                 if (i != culCont.Length)
                     if (cul.Contains(" = {") && culCont[i + 1].Contains("color") && !cul.Contains("#"))
                     {
+                        CulturesRGBsColorsList.Add(culCont[i + 1].Split('{')[1]);
+                        if (CulturesRGBsColorsList.Last().Length > CulturesRGBsColorsList.Last().IndexOf("}"))
+                            CulturesRGBsColorsList[CulturesRGBsColorsList.Count() - 1] = CulturesRGBsColorsList[CulturesRGBsColorsList.Count() - 1].Remove(CulturesRGBsColorsList.Last().IndexOf("}"));
+                        else
+                            CulturesRGBsColorsList[CulturesRGBsColorsList.Count() - 1] = CulturesRGBsColorsList[CulturesRGBsColorsList.Count() - 1].Replace("}", String.Empty);
+                        if (CulturesRGBsColorsList.Last()[0] == ' ')
+                            CulturesRGBsColorsList[CulturesRGBsColorsList.Count() - 1] = CulturesRGBsColorsList[CulturesRGBsColorsList.Count() - 1].Remove(0, 1);
                         rl.Add(cul.Split('=')[0].Replace(" ", string.Empty));
                     }
                 i++;
             }
-
             return rl;
         }
 
@@ -1017,7 +1035,7 @@ namespace VicII_Province_Creator
                 OpenCultureAutoSuggestionBox();
 
                 // Settings.  
-                CultureList.ItemsSource = GetAllCulturesNames().Where(p => p.ToLower().Contains(cultureTb.Text.ToLower())).ToList();
+                CultureList.ItemsSource = AutoCompletationCultureList.Where(p => p.ToLower().Contains(cultureTb.Text.ToLower())).ToList();
             }
             catch (Exception ex)
             {
