@@ -30,7 +30,6 @@
             Height="26"
             Margin="10,23,28,0"
             VerticalAlignment="Top"
-            Text="10"
             TextChanged="mapPathTb_TextChanged"
             TextWrapping="Wrap" />
         <Button
