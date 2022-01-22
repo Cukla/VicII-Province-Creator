@@ -24,6 +24,8 @@ namespace VicII_Province_Creator
     {
         ProvinceListWindow w = new ProvinceListWindow();
 
+        string TextColor = "Black";
+
         string id;
         string provName;
         string pathToMap;
@@ -1091,6 +1093,11 @@ namespace VicII_Province_Creator
             base.OnClosed(e);
             w.Close();
             IsClosed = true;
+        }
+
+        private void NightModeBtn_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -5,86 +5,93 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:VicII_Province_Creator"
     xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:ui="http://schemas.modernwpf.com/2019"
     Title="Victoria II Province Creator"
-    MaxWidth="710"
-    ui:WindowHelper.UseModernWindowStyle="True"
+    MaxWidth="730"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <ScrollViewer HorizontalScrollBarVisibility="Auto">
         <Grid
+            x:Name="BackGraund"
             Width="690"
             Height="915"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="331*" />
-                <RowDefinition Height="127*" />
-            </Grid.RowDefinitions>
-            <TextBox
-                x:Name="idTb"
-                Width="198"
-                Height="22"
-                Margin="10,20,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                PreviewTextInput="NumberValidationTextBox" />
-            <TextBox
-                x:Name="provNameTb"
-                Width="198"
-                Height="22"
-                Margin="10,75,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top" />
+
+            <StackPanel Margin="0,0,482,499">
+                <TextBox
+                    x:Name="idTb"
+                    Height="36"
+                    Margin="10"
+                    materialDesign:HintAssist.Hint="ID"
+                    PreviewTextInput="NumberValidationTextBox"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                <TextBox
+                    x:Name="provNameTb"
+                    Height="36"
+                    Margin="10"
+                    materialDesign:HintAssist.Hint="Province Name"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                <StackPanel Margin="10" Orientation="Horizontal">
+                    <TextBox
+                        x:Name="redTb"
+                        Width="50"
+                        Height="36"
+                        Margin="10,0,0,0"
+                        materialDesign:HintAssist.Hint="Red"
+                        PreviewTextInput="NumberValidationTextBox"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="0" />
+                    <TextBox
+                        x:Name="greenTb"
+                        Width="50"
+                        Height="36"
+                        Margin="10,0,0,0"
+                        materialDesign:HintAssist.Hint="Green"
+                        PreviewTextInput="NumberValidationTextBox"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="0" />
+                    <TextBox
+                        x:Name="blueTb"
+                        Width="50"
+                        Height="36"
+                        Margin="10,0,0,0"
+                        materialDesign:HintAssist.Hint="Blue"
+                        PreviewTextInput="NumberValidationTextBox"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="0" />
+                </StackPanel>
+            </StackPanel>
+
             <Button
                 x:Name="createBtn"
-                Grid.Row="1"
                 Width="198"
-                Margin="10,206.5,0,0"
+                Margin="10,0,0,10"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top"
+                VerticalAlignment="Bottom"
                 Click="createBtn_Click"
                 Content="Create" />
-            <TextBox
-                x:Name="redTb"
-                Width="27"
-                Height="34"
-                Margin="10,130,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                PreviewTextInput="NumberValidationTextBox"
-                Text="0" />
-            <TextBox
-                x:Name="greenTb"
-                Width="27"
-                Height="34"
-                Margin="77,130,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                PreviewTextInput="NumberValidationTextBox"
-                RenderTransformOrigin="0.758,1.118"
-                Text="0" />
-            <TextBox
-                x:Name="blueTb"
-                Width="27"
-                Height="34"
-                Margin="144,130,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                PreviewTextInput="NumberValidationTextBox"
-                Text="0" />
 
             <StackPanel
                 Grid.RowSpan="2"
                 Width="198"
-                Height="35"
+                Height="36"
                 Margin="10,635,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top">
                 <TextBox
                     x:Name="countryNameTb"
-                    Height="23"
+                    Height="36"
+                    materialDesign:HintAssist.Hint="Country"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                     TextChanged="countryTb_TextChanged" />
                 <Popup
                     x:Name="autoCountryPopup"
@@ -101,12 +108,14 @@
 
             <ComboBox
                 x:Name="continentCb"
-                Grid.Row="1"
                 Width="198"
-                Margin="10,161,0,0"
+                Height="40"
+                Margin="10,820,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                SelectedIndex="0">
+                materialDesign:HintAssist.Hint="Continent"
+                SelectedIndex="0"
+                Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                 <ComboBoxItem>
                     <TextBlock>Europe</TextBlock>
                 </ComboBoxItem>
@@ -135,10 +144,12 @@
             <TextBox
                 x:Name="coreTb"
                 Width="131"
-                Height="24"
-                Margin="10,280,0,0"
+                Height="36"
+                Margin="10,276,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
+                materialDesign:HintAssist.Hint="Core"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                 Text="Core" />
             <Button
                 x:Name="addCoreBtn"
@@ -147,27 +158,30 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Click="addCoreBtn_Click"
-                Content="Add" />
+                Content="Add"
+                Style="{StaticResource MaterialDesignFlatButton}" />
             <TextBox
                 x:Name="goodTb"
                 Width="198"
-                Height="23"
+                Height="36"
                 Margin="10,580,0,0"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top" />
+                VerticalAlignment="Top"
+                materialDesign:HintAssist.Hint="Trade Good"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
             <TextBox
                 x:Name="ownerTb"
-                Width="198"
-                Height="23"
-                Margin="10,225,0,0"
+                Width="188"
+                Height="36"
+                Margin="10,0,0,669"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                RenderTransformOrigin="0.452,0.891"
+                VerticalAlignment="Bottom"
+                materialDesign:HintAssist.Hint="Owner"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                 TextChanged="ownerTb_TextChanged" />
             <CheckBox
-                Grid.Row="1"
-                Width="38"
-                Margin="134,19,0,0"
+                Width="84"
+                Margin="124,681,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Click="CheckBox_Click"
@@ -184,21 +198,21 @@
             </CheckBox>
             <TextBox
                 x:Name="controllerTb"
-                Grid.Row="1"
-                Width="198"
-                Height="23"
-                Margin="10,51,0,171"
-                HorizontalAlignment="Left"
+                Height="36"
+                Margin="10,770,482,109"
+                materialDesign:HintAssist.Hint="Controller"
                 IsEnabled="False"
-                Text="Controller" />
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
             <ComboBox
                 x:Name="typeCb"
                 Width="198"
+                Height="40"
                 Margin="244,20,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                RenderTransformOrigin="0.479,0.422"
-                SelectedIndex="0">
+                materialDesign:HintAssist.Hint="Population type"
+                SelectedIndex="0"
+                Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                 <ComboBoxItem>
                     <TextBlock>Farmers</TextBlock>
                 </ComboBoxItem>
@@ -239,14 +253,16 @@
 
             <StackPanel
                 Width="198"
-                Height="34"
+                Height="36"
                 Margin="244,75,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Orientation="Vertical">
                 <TextBox
                     x:Name="cultureTb"
-                    Height="23"
+                    Height="36"
+                    materialDesign:HintAssist.Hint="Population culture"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                     TextChanged="CultureTb_TextChanged" />
                 <Popup
                     x:Name="autoCulturePopup"
@@ -263,10 +279,13 @@
             <ComboBox
                 x:Name="religionCb"
                 Width="198"
+                Height="40"
                 Margin="467,20,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                SelectedIndex="0">
+                materialDesign:HintAssist.Hint="Population Religion"
+                SelectedIndex="0"
+                Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                 <ComboBoxItem>
                     <TextBlock>Catholic</TextBlock>
                 </ComboBoxItem>
@@ -313,19 +332,23 @@
             <TextBox
                 x:Name="sizeTb"
                 Width="198"
-                Height="23"
+                Height="36"
                 Margin="467,75,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                PreviewTextInput="NumberValidationTextBox" />
+                materialDesign:HintAssist.Hint="Population size"
+                PreviewTextInput="NumberValidationTextBox"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
             <ComboBox
                 x:Name="climateCb"
-                Grid.Row="1"
                 Width="198"
-                Margin="10,106,0,0"
+                Height="40"
+                Margin="10,715,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                SelectedIndex="0">
+                materialDesign:HintAssist.Hint="Climate"
+                SelectedIndex="0"
+                Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                 <ComboBox.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
@@ -354,17 +377,12 @@
                 Margin="10,317,482,0"
                 VerticalAlignment="Top"
                 d:ItemsSource="{d:SampleData ItemCount=5}">
-
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid Margin="0,1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="5" />
-                            </Grid.ColumnDefinitions>
                             <TextBlock
-                                Grid.Column="0"
                                 FontSize="14"
+                                Foreground="Gray"
                                 Text="{Binding name}" />
                         </Grid>
                     </DataTemplate>
@@ -402,24 +420,25 @@
             </ListView>
             <Button
                 x:Name="addPopBtn"
-                Width="74"
+                Width="84"
                 Margin="591,416,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Click="addPopBtn_Click"
-                Content="Add" />
+                Content="Add pop"
+                Style="{StaticResource MaterialDesignFlatButton}" />
             <Button
                 x:Name="mixRgbBtn"
-                Width="93"
-                Margin="10,167,0,0"
+                Width="95"
+                Margin="10,175,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Click="mixRgbBtn_Click"
                 Content="Mix" />
             <Button
                 x:Name="checkBtn"
-                Width="97"
-                Margin="111,167,0,0"
+                Width="89"
+                Margin="111,175,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Click="checkBtn_Click"
@@ -427,12 +446,14 @@
             <TextBox
                 x:Name="liferatingTb"
                 Width="198"
-                Height="23"
+                Height="36"
                 Margin="10,525,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
+                materialDesign:HintAssist.Hint="Life rating"
                 FontSize="14"
-                PreviewTextInput="NumberValidationTextBox" />
+                PreviewTextInput="NumberValidationTextBox"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
             <Button
                 x:Name="delCoreBtn"
                 Width="75"
@@ -443,24 +464,31 @@
                 Content="Delete" />
             <Button
                 x:Name="delPopBtn"
-                Width="74"
-                Margin="512,416,0,0"
+                Width="99"
+                Margin="487,416,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Click="delPopBtn_Click"
-                Content="Delete" />
+                Content="Delete pop"
+                Style="{StaticResource MaterialDesignFlatButton}" />
             <Button
                 x:Name="seeCreatedProvs"
-                Width="108"
-                Margin="399,416,0,0"
+                Margin="366,416,203,0"
                 VerticalAlignment="Top"
                 Click="seeCreatedProvs_Click"
-                Content="See Provinces" />
+                Content="See Provinces"
+                Style="{StaticResource MaterialDesignFlatButton}" />
 
-            <StackPanel Margin="10,470,482,158.5" Orientation="Vertical">
+            <StackPanel
+                Height="36"
+                Margin="10,470,482,0"
+                VerticalAlignment="Top"
+                Orientation="Vertical">
                 <TextBox
                     x:Name="regionTb"
-                    Height="10"
+                    Height="36"
+                    materialDesign:HintAssist.Hint="Region"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                     TextChanged="regionTb_TextChanged" />
                 <Popup
                     x:Name="autoRegionPopup"
@@ -476,9 +504,8 @@
             </StackPanel>
 
             <ScrollViewer
-                Grid.RowSpan="2"
                 Width="446"
-                Margin="244,498,0,0"
+                Margin="244,498,0,1"
                 HorizontalAlignment="Left">
                 <StackPanel>
                     <TextBlock FontSize="16" Text="Culture" />
@@ -518,6 +545,7 @@
                 </StackPanel>
             </ScrollViewer>
             <TextBlock
+                x:Name="T1"
                 Width="157"
                 Height="22"
                 Margin="352,476,0,0"
@@ -526,134 +554,40 @@
                 FontSize="18"
                 Text="Pulation Previewer"
                 TextWrapping="Wrap" />
-            <TextBlock
-                Margin="10,4,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Text="ID"
-                TextWrapping="Wrap" />
-            <TextBlock
-                Margin="10,57,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Text="Province Name"
-                TextWrapping="Wrap" />
-            <TextBlock
-                Margin="10,114,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Text="RGB"
-                TextWrapping="Wrap" />
-            <TextBlock
-                Margin="10,209,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Text="Owner"
-                TextWrapping="Wrap" />
-            <TextBlock
-                Margin="10,264,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Text="Core"
-                TextWrapping="Wrap" />
-            <TextBlock
-                Margin="10,452,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                RenderTransformOrigin="-0.041,0.439"
-                Text="Region"
-                TextWrapping="Wrap" />
-            <TextBlock
-                Width="64"
-                Height="16"
-                Margin="10,506,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Text="Liferating"
-                TextWrapping="Wrap" />
-            <TextBlock
-                Margin="10,564,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Text="Tradegood"
-                TextWrapping="Wrap" />
-            <TextBlock
-                Margin="10,617,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Text="Country"
-                TextWrapping="Wrap" />
-            <TextBlock
-                Grid.Row="1"
-                Margin="10,88,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Text="Climate"
-                TextWrapping="Wrap" />
-            <TextBlock
-                Grid.Row="1"
-                Margin="10,145,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Text="Continent"
-                TextWrapping="Wrap" />
-            <TextBlock
-                Margin="244,4,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Text="Type"
-                TextWrapping="Wrap" />
-            <TextBlock
-                Margin="467,4,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Text="Religion"
-                TextWrapping="Wrap" />
-            <TextBlock
-                Margin="244,59,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Text="Culture"
-                TextWrapping="Wrap" />
-            <TextBlock
-                Margin="467,59,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Text="Size"
-                TextWrapping="Wrap" />
+
             <CheckBox
                 x:Name="uncolonizedCx"
-                Grid.Row="1"
                 Width="93"
-                Margin="10,19,0,0"
+                Margin="10,681,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Click="uncolonizedCx_Click"
                 Content="Uncolonized?" />
             <Button
                 x:Name="popDirBtn"
-                Width="117"
-                Margin="244,416,0,0"
+                Width="133"
+                Margin="240,416,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Click="popDirBtn_Click"
                 Content="Change Pop Dir"
-                RenderTransformOrigin="0.483,0.547" />
+                RenderTransformOrigin="0.483,0.547"
+                Style="{StaticResource MaterialDesignFlatButton}" />
             <TextBlock
                 x:Name="popDirTb"
-                Width="327"
+                Width="341"
                 Height="24"
-                Margin="338,387,0,0"
+                Margin="324,387,0,0"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                TextWrapping="Wrap" />
+                VerticalAlignment="Top" />
             <TextBlock
                 Width="117"
                 Height="24"
                 Margin="244,387,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Text="Pop Directory" />
+                Text="Pop Directory:" />
+
 
         </Grid>
     </ScrollViewer>

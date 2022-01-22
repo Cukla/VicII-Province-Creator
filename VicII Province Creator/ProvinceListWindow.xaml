@@ -9,7 +9,7 @@
     Title="ProvinceListWindow"
     Width="300"
     Height="450"
-    ui:WindowHelper.UseModernWindowStyle="True"
+  
     mc:Ignorable="d">
     <Grid>
         <ScrollViewer>
