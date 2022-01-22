@@ -1094,10 +1094,5 @@ namespace VicII_Province_Creator
             w.Close();
             IsClosed = true;
         }
-
-        private void NightModeBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }
